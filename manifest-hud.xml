@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pfd.metricstool.hud"
+    android:versionCode="100"
+    android:versionName="1.0.0">
+
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="34" />
+
+    <permission android:name="com.pfd.metricstool.permission.HUD" android:protectionLevel="signature" />
+    <uses-permission android:name="com.pfd.metricstool.permission.HUD" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <!-- development permissions, granted via: adb shell pm grant com.pfd.metricstool ... -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.DUMP" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <queries>
+        <package android:name="com.yvr.framework2d" />
+        <package android:name="com.pfd.metricstool" />
+        <provider android:authorities="com.yvr.vrsystemui.ToastContentProvider" />
+    </queries>
+
+    <application
+        android:label="PFD Metrics HUD"
+        android:icon="@drawable/ic_launcher"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+
+        <activity android:name="com.pfd.metricstool.LogConsentActivity"
+            android:exported="true"
+            android:permission="com.pfd.metricstool.permission.HUD"
+            android:taskAffinity="com.pfd.metricstool"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout" />
+
+        <service
+            android:name="com.pfd.metricstool.MetricsService"
+            android:stopWithTask="false"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Developer performance monitoring HUD for VR apps" />
+        </service>
+
+        <!-- Only shell (adb) holds WRITE_SECURE_SETTINGS, same protection as OVR Metrics Tool. -->
+        <receiver
+            android:name="com.pfd.metricstool.SettingsBroadcastReceiver"
+            android:exported="true"
+            android:permission="android.permission.WRITE_SECURE_SETTINGS">
+            <intent-filter>
+                <action android:name="com.pfd.metricstool.ENABLE_OVERLAY" />
+                <action android:name="com.pfd.metricstool.DISABLE_OVERLAY" />
+                <action android:name="com.pfd.metricstool.ENABLE_GRAPH" />
+                <action android:name="com.pfd.metricstool.DISABLE_GRAPH" />
+                <action android:name="com.pfd.metricstool.ENABLE_STATS" />
+                <action android:name="com.pfd.metricstool.DISABLE_STATS" />
+                <action android:name="com.pfd.metricstool.ENABLE_STAT" />
+                <action android:name="com.pfd.metricstool.DISABLE_STAT" />
+                <action android:name="com.pfd.metricstool.SET_GRAPH_STAT" />
+                <action android:name="com.pfd.metricstool.ENABLE_CSV" />
+                <action android:name="com.pfd.metricstool.DISABLE_CSV" />
+                <action android:name="com.pfd.metricstool.START_SERVICE" />
+                <action android:name="com.pfd.metricstool.STOP_SERVICE" />
+                <action android:name="com.pfd.metricstool.RESET_STATS" />
+                <action android:name="com.pfd.metricstool.LOG_STATE" />
+                <action android:name="com.pfd.metricstool.DUMP_SYSTEM" />
+                <action android:name="com.pfd.metricstool.ENABLE_SYSTEM_HUD" />
+                <action android:name="com.pfd.metricstool.DISABLE_SYSTEM_HUD" />
+                <!-- OVR Metrics Tool compatible action names -->
+                <action android:name="com.oculus.ovrmonitormetricsservice.ENABLE_OVERLAY" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.DISABLE_OVERLAY" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.ENABLE_GRAPH" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.DISABLE_GRAPH" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.ENABLE_STATS" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.DISABLE_STATS" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.ENABLE_STAT" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.DISABLE_STAT" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.SET_GRAPH_STAT" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.ENABLE_CSV" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.DISABLE_CSV" />
+                <action android:name="com.oculus.ovrmonitormetricsservice.LOG_STATE" />
+            </intent-filter>
+        </receiver>
+        <provider
+            android:name="com.pfd.metricstool.HudProvider"
+            android:authorities="com.pfd.metricstool.hud.provider"
+            android:exported="true"
+            android:permission="com.pfd.metricstool.permission.HUD" />
+        <receiver android:name="com.pfd.metricstool.BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.pfd.metricstool.UiRemovedReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

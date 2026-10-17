@@ -1,0 +1,16 @@
+build*/
+dist/
+tools/
+**/tools/
+*.apk
+*.idsig
+*.jks
+*.keystore
+*.p12
+*.pem
+.env
+*.log
+__pycache__/
+diagnostics/
+test-output/
+.DS_Store
