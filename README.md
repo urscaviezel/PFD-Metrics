@@ -1,5 +1,61 @@
 # PFD Metrics 1.0.1
 
+English first · [Deutsch](#deutsch)
+
+A performance HUD for **Play for Dream MR**, with live graphs and CSV recording. The control app and HUD run as separate Android packages. Tested on PFDM MR with Android 14 / SDK 34. Firmware changes may affect the internal YVR interfaces used by the app.
+
+**[Download the latest release](https://github.com/urscaviezel/PFD-Metrics/releases/latest)**
+
+## Windows installation
+
+1. Download and **extract the entire Windows release ZIP**. Installing the two APKs alone does not grant the required permissions.
+2. Enable developer mode and USB debugging on your headset. Connect it using a USB data cable, wake it up and approve the computer's USB debugging request inside the headset.
+3. Double-click **setup.cmd**. If ADB is missing, setup downloads Android Platform-Tools directly from Google. Internet access is needed for this initial download. Windows 10/11 with Windows PowerShell 5.1 is required.
+4. Wait for **DONE / FERTIG**. Setup installs both APKs, grants and verifies the required permissions, then opens the control app.
+5. Enable monitoring in the headset and allow access to device logs. You can then disconnect USB.
+
+After rebooting the headset, approve log access again inside the headset; reconnecting to a PC is not required. Turning monitoring off pauses measurement and the HUD while retaining the approved log reader for the current session. You can close the app window. Android terminating the process, force-stopping the app or installing an update can also end that session.
+
+`setup.cmd` replaces the old installer. No additional setup.exe or shell log helper is needed. Run setup again to repair permissions or update the installation. It never automatically uninstalls existing apps.
+
+## Troubleshooting
+
+- No device / offline: check the data cable, developer mode and Windows USB driver; wake the headset and reconnect USB.
+- Unauthorized: approve USB debugging in the headset, then run setup again.
+- Multiple devices: disconnect the others or use `setup.cmd -Serial DEVICE`.
+- Existing ADB: `setup.cmd -AdbPath "C:\Android\platform-tools\adb.exe" -NoDownload`.
+- Offline setup: download official Platform-Tools beforehand and extract them into `tools/platform-tools/` beside setup.cmd.
+- INSTALL_FAILED_UPDATE_INCOMPATIBLE: the installed apps use a different signing key. Updates must use the same key. Manually uninstalling deletes settings and is not an automatic repair step.
+- Any other failure: fix the reported problem and run setup again. Only the final green DONE / FERTIG message confirms successful verification.
+
+## Build information and updates
+
+The top of the app shows the installed app and HUD versions, Android build numbers, build time in UTC and a short source ID. The first public release was **1.0.0**, with internal build number **100** so it could update earlier private test versions. Version **1.0.1** uses build **101**.
+
+The app checks for stable GitHub releases when opened, at most once per 24 hours. You can disable automatic checks or select **Check for updates** at any time. The update source is [urscaviezel/PFD-Metrics](https://github.com/urscaviezel/PFD-Metrics). No GitHub account or token is required. Missing releases and connection errors are shown in the app.
+
+When an update is available, the app displays its version and release notes. Only after **Download & install** does it download both APKs and check their SHA-256 hashes, package names, versions and signing certificate. Android then asks you to confirm installation. The first time, allow this app to install unknown apps, return to the control app, select **Check for updates** again and approve the update. **Later** downloads and installs nothing.
+
+Both APKs are installed in one Android transaction. If you close the window before Android's confirmation, the pending confirmation resumes the next time you open the app. Updates interrupt monitoring; afterwards, open the app, enable monitoring and approve log access again if requested. Permissions granted by PC setup remain in place during a normal update. Updates are never silently installed in the background.
+
+The complete **1.0.0 → 1.0.1** update was tested on the headset: GitHub check, update prompt, download, Android confirmation and installation of both APKs succeeded. Permissions were retained, and a subsequent check reported no newer version.
+
+## Source code and license
+
+See [BUILDING.md](BUILDING.md) for build and release instructions and [TESTING.md](TESTING.md) for test results and limitations. Packages: `com.pfd.metricstool` and `com.pfd.metricstool.hud`. App UI languages: English, German and French.
+
+The Windows ZIP includes the corresponding source in `source/`; a separate Source ZIP is also available. Build outputs, private signing keys, ADB and device logs are excluded from the source repository.
+
+Project source is licensed under **GNU GPL version 3 only (SPDX: GPL-3.0-only)**; see [LICENSE](LICENSE). Redistribution and modification are subject to that license. No warranty. This is not an official Play for Dream or Meta application.
+
+Android SDK, JDK and ADB are separate tools with their own licenses; they are not distributed in these ZIPs. Setup obtains ADB directly from [Google's Platform-Tools distribution](https://developer.android.com/tools/releases/platform-tools).
+
+---
+
+# Deutsch
+
+# PFD Metrics 1.0.1
+
 Leistungsdaten als HUD auf dem Play for Dream MR. Bedien-App und HUD laufen als getrennte Android-Pakete. Unterstützt und geprüft: PFDM MR mit Android 14 / SDK 34. Herstellerinterne YVR-Schnittstellen können sich mit Firmware-Updates ändern.
 
 [Download der aktuellen Version](https://github.com/urscaviezel/PFD-Metrics/releases/latest)
