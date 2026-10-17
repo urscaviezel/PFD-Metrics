@@ -1,4 +1,4 @@
-# PFD Metrics 1.0.0
+# PFD Metrics 1.0.1
 
 Leistungsdaten als HUD auf dem Play for Dream MR. Bedien-App und HUD laufen als getrennte Android-Pakete. Unterstützt und geprüft: PFDM MR mit Android 14 / SDK 34. Herstellerinterne YVR-Schnittstellen können sich mit Firmware-Updates ändern.
 

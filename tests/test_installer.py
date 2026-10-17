@@ -35,7 +35,7 @@ elif a[:3]==['shell','appops','set']: pass
 elif a[:3]==['shell','appops','get']:
  print(a[4]+(': default' if mode=='appop_error' else ': allow'))
 elif a[:3]==['shell','dumpsys','package']:
- print('versionName=1.0.0')
+ print('versionName=1.0.1')
  for p in ['READ_LOGS','DUMP','POST_NOTIFICATIONS']:
   print('android.permission.'+p+': granted='+('false' if mode=='permission_missing' else 'true'))
 elif a[:3]==['shell','am','start']: print('Starting: Intent')
@@ -57,7 +57,7 @@ class InstallerTests(unittest.TestCase):
             for name in ['PFDMetricsHUD.apk','PFDMetricsTool.apk']:
                 (p/name).write_bytes(b'test apk '+name.encode())
                 hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
-            (p/'release.json').write_text(json.dumps({'version':'1.0.0','sha256':hashes}))
+            (p/'release.json').write_text(json.dumps({'version':'1.0.1','sha256':hashes}))
             if corrupt: (p/'PFDMetricsHUD.apk').write_bytes(b'corrupted')
             if missing: (p/'PFDMetricsTool.apk').unlink()
             env=dict(os.environ,MOCK_MODE=mode,MOCK_LOG=str(p/'calls.jsonl'))
